@@ -1,0 +1,23 @@
+{
+  "name": "shop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarAhmed3012/Shop.git"
+  },
+  "author": "Omar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarAhmed3012/Shop/issues"
+  },
+  "homepage": "https://github.com/OmarAhmed3012/Shop#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
