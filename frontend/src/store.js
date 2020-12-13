@@ -6,21 +6,28 @@ import {
   productListReducer,
   productDetailsReducer,
 } from './reducers/productReducers.js'
+import { userLoginReducer } from './reducers/userReducers'
 
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
+  userLogin: userLoginReducer,
 })
 
 const cartItemsFromStorage = localStorage.getItem('cartItems')
   ? localStorage.getItem('cartItems')
   : []
 
+const userInfoFromStorage = localStorage.getItem('userInfo')
+  ? localStorage.getItem('userInfo')
+  : null
+
 console.log(cartItemsFromStorage)
 
 const initialState = {
   cartItems: cartItemsFromStorage,
+  userLogin: { userInfo: userInfoFromStorage },
 }
 
 const middlware = [thunk]
