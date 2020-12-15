@@ -8,7 +8,6 @@ const Header = () => {
   const dispatch = useDispatch()
   const userLogin = useSelector((state) => state.userLogin)
   let { userInfo } = userLogin
-  userInfo ? (userInfo = JSON.parse(userInfo)) : (userInfo = undefined)
 
   const logoutHandler = () => {
     dispatch(logout())
