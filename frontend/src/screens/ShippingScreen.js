@@ -75,6 +75,4 @@ const ShippingScreen = ({ history }) => {
   )
 }
 
-ShippingScreen.propTypes = {}
-
 export default ShippingScreen
