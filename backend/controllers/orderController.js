@@ -20,9 +20,9 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
     const order = new Order({
       orderItems,
-      shippingAddres,
+      shippingAddress,
       user: req.user._id,
-      paymetMethod,
+      paymentMethod,
       itemsPrice,
       taxPrice,
       shippingPrice,
