@@ -1,26 +1,26 @@
-import React, { useState } from 'react'
-import { Button, Form, Col } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import FormContainer from './../components/FormContainer'
-import { savePaymentMethod } from './../actions/cartActions'
-import CheckoutSteps from './../components/CheckoutSteps'
+import React, { useState } from 'react';
+import { Button, Form, Col } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import FormContainer from './../components/FormContainer';
+import { savePaymentMethod } from './../actions/cartActions';
+import CheckoutSteps from './../components/CheckoutSteps';
 
 const PaymentScreen = ({ history }) => {
-  const cart = useSelector((state) => state.cart)
-  const { shippingAddress } = cart
+  const cart = useSelector((state) => state.cart);
+  const { shippingAddress } = cart;
 
   if (!shippingAddress) {
-    history.push('/shipping')
+    history.push('/shipping');
   }
-  const [paymentMethod, setPaymentMethod] = useState('PayPal')
+  const [paymentMethod, setPaymentMethod] = useState('PayPal');
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
-    e.preventDefault()
-    dispatch(savePaymentMethod(paymentMethod))
-    history.push('/placeorder')
-  }
+    e.preventDefault();
+    dispatch(savePaymentMethod(paymentMethod));
+    history.push('/placeorder');
+  };
 
   return (
     <FormContainer>
@@ -52,12 +52,12 @@ const PaymentScreen = ({ history }) => {
           </Col>
         </Form.Group>
 
-        <Button type="submit" varient="primary">
+        <Button type="submit" variant="primary">
           Continue
         </Button>
       </Form>
     </FormContainer>
-  )
-}
+  );
+};
 
-export default PaymentScreen
+export default PaymentScreen;
