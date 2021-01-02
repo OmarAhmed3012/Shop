@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
-import { PayPalButton } from 'react-paypal-button-v2';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from './../components/Loader';
-import Message from './../components/Message';
-import { Link } from 'react-router-dom';
-import { getOrderDetails, payOrder } from './../actions/orderActions';
 import axios from 'axios';
+import { PayPalButton } from 'react-paypal-button-v2';
+import { Link } from 'react-router-dom';
+import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import Message from '../components/Message';
+import Loader from '../components/Loader';
+import {
+  getOrderDetails,
+  payOrder,
+  payOrderFree,
+} from '../actions/orderActions';
 import { ORDER_PAY_RESET } from '../constants/orderConstants';
 
 const OrderScreen = ({ match }) => {
@@ -23,9 +27,11 @@ const OrderScreen = ({ match }) => {
   const { loading: loadingPay, success: successPay } = orderPay;
 
   if (!loading) {
+    //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2);
     };
+
     order.itemsPrice = addDecimals(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
@@ -57,8 +63,13 @@ const OrderScreen = ({ match }) => {
   }, [dispatch, orderId, successPay, order]);
 
   const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult);
+    console.log('payment results' + paymentResult);
     dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const payHandler = () => {
+    console.log('from pay handler');
+    dispatch(payOrderFree(orderId));
   };
 
   return loading ? (
@@ -67,19 +78,17 @@ const OrderScreen = ({ match }) => {
     <Message variant="danger">{error}</Message>
   ) : (
     <>
-      <h1>Order: {order._id}</h1>
+      <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h2>Shipping</h2>
               <p>
-                {' '}
                 <strong>Name: </strong> {order.user.name}
               </p>
               <p>
-                {' '}
-                <strong>Email: </strong>
+                <strong>Email: </strong>{' '}
                 <a href={`mailto:${order.user.email}`}>{order.user.email}</a>
               </p>
               <p>
@@ -104,9 +113,9 @@ const OrderScreen = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paied on {order.paiedAt}</Message>
+                <Message variant="success">Paid on {order.paidAt}</Message>
               ) : (
-                <Message variant="danger">Not Paied</Message>
+                <Message variant="danger">Not Paid</Message>
               )}
             </ListGroup.Item>
 
@@ -133,7 +142,7 @@ const OrderScreen = ({ match }) => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x {item.price} = ${item.qty * item.price}
+                          {item.qty} x ${item.price} = ${item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -179,11 +188,22 @@ const OrderScreen = ({ match }) => {
                   {!sdkReady ? (
                     <Loader />
                   ) : (
-                    <PayPalButton
-                      amount={order.totalPrice}
-                      onSuccess={successPaymentHandler}
-                    />
+                    <React.Fragment>
+                      <PayPalButton
+                        amount={order.totalPrice}
+                        onSuccess={successPaymentHandler}
+                      />
+                    </React.Fragment>
                   )}
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn-block"
+                      onClick={payHandler}
+                    >
+                      PAY
+                    </Button>
+                  </ListGroup.Item>
                 </ListGroup.Item>
               )}
             </ListGroup>
