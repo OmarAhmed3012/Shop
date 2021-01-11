@@ -1,5 +1,7 @@
+import { json } from 'express';
 import asyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
+import Product from '../models/productModel.js';
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -30,6 +32,15 @@ const addOrderItems = asyncHandler(async (req, res) => {
       shippingPrice,
       totalPrice,
     });
+
+    orderItems.map(async (product) => {
+      const dbproduct = await Product.findById(product.product);
+      //console.log(`db product ${dbproduct}`);
+      dbproduct.countInStock -= product.qty;
+      await dbproduct.save();
+    });
+
+    //console.log(`Order Items ${JSON.stringify(orderItems)}`);
 
     const createdOrder = await order.save();
 
