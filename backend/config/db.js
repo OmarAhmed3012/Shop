@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
-const url = 'mongodb://localhost:27017/Shop';
-
-//const url = process.env.MONGO_URI
+//const url = 'mongodb://localhost:27017/Shop';
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(url, {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
